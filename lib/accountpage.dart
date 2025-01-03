@@ -4,9 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:kepegawaian/signin_screen.dart';
 import 'dart:convert';
 
-
 class AccountPage extends StatefulWidget {
-  final int idKaryawan; 
+  final int idKaryawan;
   const AccountPage({super.key, required this.idKaryawan});
 
   @override
@@ -19,6 +18,7 @@ class _AccountPageState extends State<AccountPage> {
   String tanggalMulai = 'Loading...';
   String departemen = 'Loading...';
   String jabatan = 'Loading...';
+  String images = 'Loading...';
   bool isLoading = true;
 
   @override
@@ -27,9 +27,9 @@ class _AccountPageState extends State<AccountPage> {
     _fetchProfileData();
   }
 
-
   Future<void> _fetchProfileData() async {
-    final url = Uri.parse('http://10.0.3.2/kepegawaian_dzaky/profile.php?id_karyawan=${widget.idKaryawan}');
+    final url = Uri.parse(
+        'http://10.0.3.2/kepegawaian_dzaky/profile.php?id_karyawan=${widget.idKaryawan}');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -41,6 +41,7 @@ class _AccountPageState extends State<AccountPage> {
             tanggalMulai = data['data']['tanggal_mulai'];
             departemen = data['data']['departemen'] ?? 'Tidak ada data';
             jabatan = data['data']['jabatan'] ?? 'Tidak ada data';
+            images = data['data']['images'] ?? 'Tidak ada data';
             isLoading = false;
           });
         } else {
@@ -73,7 +74,7 @@ class _AccountPageState extends State<AccountPage> {
         backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
           icon: const Icon(
             CupertinoIcons.arrow_left,
@@ -81,11 +82,6 @@ class _AccountPageState extends State<AccountPage> {
             color: Colors.black,
           ),
         ),
-        // title: const Text(
-        //   'Profile',
-        //   style: TextStyle(color: Colors.black),
-        // ),
-        // centerTitle: true,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -93,17 +89,22 @@ class _AccountPageState extends State<AccountPage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [ 
-                  // Foto Profil
-                  // const CircleAvatar(
-                  //   radius: 50,
-                  //   backgroundImage: AssetImage('assets/profile_picture.jpg'),
-                  //   child: Icon(
-                  //     CupertinoIcons.person_fill,
-                  //     size: 50,
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: images.isNotEmpty &&
+                            images != 'Tidak ada data'
+                        ? NetworkImage(
+                            images) 
+                        : null, 
+                    child: images.isEmpty || images == 'Tidak ada data'
+                        ? const Icon(
+                            CupertinoIcons.person_fill,
+                            size: 50,
+                            color: Colors.white,
+                          )
+                        : null, 
+                  ),
                   const SizedBox(height: 16),
 
                   // Nama Karyawan
@@ -136,11 +137,12 @@ class _AccountPageState extends State<AccountPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
+                          _buildInfoRow(Icons.work, 'Departemen', departemen),
+                          const SizedBox(height: 16),
                           _buildInfoRow(Icons.phone, 'Telepon', telepon),
                           const SizedBox(height: 16),
-                          _buildInfoRow(Icons.calendar_today, 'Tanggal Masuk', tanggalMulai),
-                          const SizedBox(height: 16),
-                          _buildInfoRow(Icons.work, 'Departemen', departemen),
+                          _buildInfoRow(Icons.calendar_today, 'Tanggal Masuk',
+                              tanggalMulai),
                         ],
                       ),
                     ),

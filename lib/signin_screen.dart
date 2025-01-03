@@ -54,7 +54,11 @@ class _SignInScreenState extends State<SignInScreen> {
         if (mounted) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                idKaryawan: dataLogin['data']['id_karyawan'], // Kirim idKaryawan
+              ),
+            ),
           );
         }
       } else {
@@ -149,26 +153,24 @@ class _SignInScreenState extends State<SignInScreen> {
                                 return null;
                               },
                               decoration: InputDecoration(
-                                  label: const Text('Username'),
-                                  hintText: 'Enter Username',
-                                  hintStyle: const TextStyle(
-                                    color: Colors.black26,
+                                label: const Text('Username'),
+                                hintText: 'Enter Username',
+                                hintStyle: const TextStyle(
+                                  color: Colors.black26,
+                                ),
+                                border: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Colors.black12,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors
-                                          .black12, // Default border color
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                    color: Colors.black12,
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      color: Colors
-                                          .black12, // Default border color
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  fillColor: Colors.black),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               height: 25.0,
@@ -191,15 +193,13 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                                 border: OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                    color:
-                                        Colors.black12, // Default border color
+                                    color: Colors.black12,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: const BorderSide(
-                                    color:
-                                        Colors.black12, // Default border color
+                                    color: Colors.black12,
                                   ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -258,8 +258,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                   }
                                   login();
                                 },
-                                child: const Text('Sign In',
-                                style: TextStyle(color: Colors.blue),
+                                child: const Text(
+                                  'Sign In',
+                                  style: TextStyle(color: Colors.blue),
                                 ),
                               ),
                             ),

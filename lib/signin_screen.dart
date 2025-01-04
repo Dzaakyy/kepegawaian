@@ -103,7 +103,7 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Stack(
         children: [
           Image.asset(
-            './lib/assets/bg5.jpg',
+            './lib/assets/signin.png',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,

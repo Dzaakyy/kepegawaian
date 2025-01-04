@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kepegawaian/absenpage.dart';
-import 'package:kepegawaian/cutipage.dart';
+import 'package:kepegawaian/absenmasuk.dart';
+import 'package:kepegawaian/absenpulang.dart';
 import 'package:kepegawaian/homepage.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,8 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     widgetList = [
       HomePage(idKaryawan: widget.idKaryawan),
-      AbsenPage(idKaryawan: widget.idKaryawan),
-      const CutiPage(), // Kirim idKaryawan ke CutiPage
+      AbsenMasuk(idKaryawan: widget.idKaryawan),
+      AbsenPulang(idKaryawan: widget.idKaryawan)
     ];
   }
 

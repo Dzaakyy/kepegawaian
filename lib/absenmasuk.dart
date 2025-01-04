@@ -1,21 +1,20 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class AbsenPage extends StatefulWidget {
+class AbsenMasuk extends StatefulWidget {
   final int idKaryawan;
-  const AbsenPage({super.key, required this.idKaryawan});
+  const AbsenMasuk({super.key, required this.idKaryawan});
 
   @override
-  State<AbsenPage> createState() => _AbsenPageState();
+  State<AbsenMasuk> createState() => _AbsenMasukState();
 }
 
-class _AbsenPageState extends State<AbsenPage> {
+class _AbsenMasukState extends State<AbsenMasuk> {
   List<Map<String, String>> riwayatAbsen = [];
-  bool isLoading = false;
-  bool isError = false;
-  bool sudahAbsenHariIni = false; // Tambahkan variabel ini
+  bool loading = false;
+  bool error = false;
+  bool sudahAbsenHariIni = false;
 
   @override
   void initState() {
@@ -25,15 +24,17 @@ class _AbsenPageState extends State<AbsenPage> {
 
   Future<void> _riwayatAbsen() async {
     setState(() {
-      isLoading = true;
-      isError = false;
+      loading = true;
+      error = false;
     });
 
-    final urlRiwayatAbsen =
+    String urlRiwayatAbsen =
         'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
 
     try {
-      final response = await http.get(Uri.parse(urlRiwayatAbsen)).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(Uri.parse(urlRiwayatAbsen))
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
@@ -50,43 +51,45 @@ class _AbsenPageState extends State<AbsenPage> {
           final today =
               '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-          sudahAbsenHariIni = riwayatAbsen.any((absen) => absen['tanggal'] == today);
+          sudahAbsenHariIni =
+              riwayatAbsen.any((absen) => absen['tanggal'] == today);
         });
       } else {
         setState(() {
-          isError = true;
+          error = true;
         });
       }
     } catch (e) {
       setState(() {
-        isError = true;
+        error = true;
       });
     } finally {
       if (mounted) {
         setState(() {
-          isLoading = false;
+          loading = false;
         });
       }
     }
   }
 
   Future<void> _absenMasuk() async {
-    if (isLoading || sudahAbsenHariIni) return; // Jangan izinkan absen jika sudah absen hari ini
+    if (loading || sudahAbsenHariIni) return;
 
     setState(() {
-      isLoading = true;
+      loading = true;
     });
 
     final now = DateTime.now();
-    final tanggal = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final tanggal =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     final waktuMasuk = '${now.hour}:${now.minute}';
-    const urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen.php';
+    const urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen_masuk.php';
 
     try {
       final response = await http.post(
         Uri.parse(urlAbsen),
         body: {
-          'karyawan_id': widget.idKaryawan.toString(), // Kirim idKaryawan
+          'karyawan_id': widget.idKaryawan.toString(),
           'tanggal': tanggal,
           'jam_masuk': waktuMasuk,
         },
@@ -101,12 +104,12 @@ class _AbsenPageState extends State<AbsenPage> {
             ),
           );
 
-          // Set status sudahAbsenHariIni ke true
+          // Update state
           setState(() {
             sudahAbsenHariIni = true;
           });
 
-          // Perbarui riwayat absen
+          // Refresh riwayat absen
           await _riwayatAbsen();
         }
       } else {
@@ -129,9 +132,28 @@ class _AbsenPageState extends State<AbsenPage> {
     } finally {
       if (mounted) {
         setState(() {
-          isLoading = false;
+          loading = false;
         });
       }
+    }
+  }
+
+  String _hitungKeterlambatan(String jamMasuk) {
+    final waktuMasuk = jamMasuk.split(':');
+    final jam = int.parse(waktuMasuk[0]);
+    final menit = int.parse(waktuMasuk[1]);
+
+    final waktuAbsen = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, jam, menit);
+    final batasWaktuMasuk = DateTime(
+        DateTime.now().year, DateTime.now().month, DateTime.now().day, 9, 0);
+
+    final durasiKeterlambatan = waktuAbsen.difference(batasWaktuMasuk);
+
+    if (durasiKeterlambatan.inMinutes > 0) {
+      return 'Telat ${durasiKeterlambatan.inMinutes} menit';
+    } else {
+      return '';
     }
   }
 
@@ -139,7 +161,7 @@ class _AbsenPageState extends State<AbsenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Absen'),
+        title: const Text('Absen Masuk'),
         centerTitle: true,
       ),
       body: Padding(
@@ -147,32 +169,46 @@ class _AbsenPageState extends State<AbsenPage> {
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: isLoading || sudahAbsenHariIni ? null : _absenMasuk, // Nonaktifkan jika sudah absen
+              onPressed: loading || sudahAbsenHariIni ? null : _absenMasuk,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: isLoading
+              child: loading
                   ? const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     )
                   : Text(
-                      sudahAbsenHariIni ? 'Sudah Absen Hari Ini' : 'Absen Masuk', // Ubah teks jika sudah absen
+                      sudahAbsenHariIni
+                          ? 'Sudah Absen Masuk Hari Ini'
+                          : 'Absen Masuk',
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Riwayat Absen',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+            Column(
+              children: [
+                const Text(
+                  'Riwayat Absen Masuk',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Jam Masuk: 09:00',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors
+                        .grey[600], // Warna abu-abu untuk informasi tambahan
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 10),
-            if (isLoading)
+            if (loading)
               const Center(child: CircularProgressIndicator())
-            else if (isError)
+            else if (error)
               const Center(
                 child: Text(
                   'Gagal memuat data riwayat absen.',
@@ -189,11 +225,26 @@ class _AbsenPageState extends State<AbsenPage> {
                   itemCount: riwayatAbsen.length,
                   itemBuilder: (context, index) {
                     final absen = riwayatAbsen[index];
+                    final keterlambatan = _hitungKeterlambatan(absen['masuk']!);
+
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
                         title: Text('Tanggal: ${absen['tanggal']}'),
-                        subtitle: Text('Masuk: ${absen['masuk']}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Masuk: ${absen['masuk']}'),
+                            if (keterlambatan.isNotEmpty)
+                              Text(
+                                keterlambatan,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 14,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     );
                   },

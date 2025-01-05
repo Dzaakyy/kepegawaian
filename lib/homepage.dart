@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kepegawaian/acara_perusahaan.dart';
 import 'package:kepegawaian/accountpage.dart';
+import 'package:kepegawaian/ide_kreatif.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,8 +41,6 @@ class _HomePageState extends State<HomePage> {
       idKaryawan = prefs.getInt('idKaryawan') ?? 0;
     });
   }
-
-
 
   Future<void> _departemen() async {
     String urlDepartemen = "http://10.0.2.2/kepegawaian_dzaky/departemen.php";
@@ -142,8 +141,11 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(context, 
-              MaterialPageRoute(builder: (context) => const AcaraPerusahaan())
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AcaraPerusahaan(),
+                ),
               );
             },
             icon: const Icon(
@@ -159,7 +161,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(20),
           child: Column(
             children: [
-           
+              // Card untuk Absen Masuk
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
@@ -216,7 +218,6 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-            
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(
@@ -271,62 +272,66 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              // const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-              
-              // Card(
-              //   elevation: 4,
-              //   shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(15),
-              //   ),
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       gradient: LinearGradient(
-              //         colors: [Colors.blue.shade400, Colors.blue.shade700],
-              //         begin: Alignment.topLeft,
-              //         end: Alignment.bottomRight,
-              //       ),
-              //       borderRadius: BorderRadius.circular(15),
-              //     ),
-              //     child: const Padding(
-              //       padding: EdgeInsets.all(16),
-              //       child: Row(
-              //         children: [
-              //           Icon(
-              //             Icons.assignment,
-              //             size: 40,
-              //             color: Colors.white,
-              //           ),
-              //           SizedBox(width: 16),
-              //           Expanded(
-              //             child: Column(
-              //               crossAxisAlignment: CrossAxisAlignment.start,
-              //               children: [
-              //                 Text(
-              //                   'Sisa Cuti Anda',
-              //                   style: TextStyle(
-              //                     fontSize: 16,
-              //                     fontWeight: FontWeight.bold,
-              //                     color: Colors.white,
-              //                   ),
-              //                 ),
-              //                 SizedBox(height: 5),
-              //                 Text(
-              //                   'Anda memiliki 5 hari cuti tersisa',
-              //                   style: TextStyle(
-              //                     fontSize: 14,
-              //                     color: Colors.white70,
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
-             
+              Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => IdeKreatif(idKaryawan: idKaryawan),
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(15),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.lightbulb_outline,
+                          size: 40,
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Ide Kreatif',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Ajukan ide kreatif Anda',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20,
+                          color: Colors.grey,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
 
               Card(

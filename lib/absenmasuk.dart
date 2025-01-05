@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,9 +13,8 @@ class AbsenMasuk extends StatefulWidget {
 
 class _AbsenMasukState extends State<AbsenMasuk> {
   List<Map<String, String>> riwayatAbsen = [];
-  bool loading = false;
-  bool error = false;
   bool sudahAbsenHariIni = false;
+  bool loading = false;
 
   @override
   void initState() {
@@ -25,16 +25,13 @@ class _AbsenMasukState extends State<AbsenMasuk> {
   Future<void> _riwayatAbsen() async {
     setState(() {
       loading = true;
-      error = false;
     });
 
     String urlRiwayatAbsen =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
+        'http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
 
     try {
-      final response = await http
-          .get(Uri.parse(urlRiwayatAbsen))
-          .timeout(const Duration(seconds: 10));
+      final response = await http.get(Uri.parse(urlRiwayatAbsen));
 
       if (response.statusCode == 200) {
         final List<dynamic> responseData = json.decode(response.body);
@@ -46,7 +43,6 @@ class _AbsenMasukState extends State<AbsenMasuk> {
             };
           }).toList();
 
-          // Periksa apakah sudah absen hari ini
           final now = DateTime.now();
           final today =
               '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
@@ -54,15 +50,11 @@ class _AbsenMasukState extends State<AbsenMasuk> {
           sudahAbsenHariIni =
               riwayatAbsen.any((absen) => absen['tanggal'] == today);
         });
-      } else {
-        setState(() {
-          error = true;
-        });
       }
     } catch (e) {
-      setState(() {
-        error = true;
-      });
+      if (kDebugMode) {
+        print('Error: $e');
+      }
     } finally {
       if (mounted) {
         setState(() {
@@ -73,7 +65,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
   }
 
   Future<void> _absenMasuk() async {
-    if (loading || sudahAbsenHariIni) return;
+    if (sudahAbsenHariIni || loading) return;
 
     setState(() {
       loading = true;
@@ -83,7 +75,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
     final tanggal =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     final waktuMasuk = '${now.hour}:${now.minute}';
-    const urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen_masuk.php';
+    const urlAbsen = 'http://10.0.2.2/kepegawaian_dzaky/absen_masuk.php';
 
     try {
       final response = await http.post(
@@ -93,7 +85,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
           'tanggal': tanggal,
           'jam_masuk': waktuMasuk,
         },
-      ).timeout(const Duration(seconds: 10));
+      );
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
@@ -101,15 +93,14 @@ class _AbsenMasukState extends State<AbsenMasuk> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(responseData['message'] ?? 'Absen berhasil'),
+              backgroundColor: Colors.green,
             ),
           );
 
-          // Update state
           setState(() {
             sudahAbsenHariIni = true;
           });
 
-          // Refresh riwayat absen
           await _riwayatAbsen();
         }
       } else {
@@ -117,6 +108,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Gagal melakukan absen. Silakan coba lagi.'),
+              backgroundColor: Colors.red,
             ),
           );
         }
@@ -126,6 +118,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan: ${e.toString()}'),
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -161,18 +154,36 @@ class _AbsenMasukState extends State<AbsenMasuk> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Absen Masuk'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade700, Colors.blue.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Absen Masuk',
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        elevation: 10,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: loading || sudahAbsenHariIni ? null : _absenMasuk,
+              onPressed: (sudahAbsenHariIni || loading) ? null : _absenMasuk,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.blueAccent,
                 minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
               ),
               child: loading
                   ? const CircularProgressIndicator(
@@ -199,57 +210,53 @@ class _AbsenMasukState extends State<AbsenMasuk> {
                   'Jam Masuk: 09:00',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors
-                        .grey[600], // Warna abu-abu untuk informasi tambahan
+                    color: Colors.grey[600],
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
-            if (loading)
-              const Center(child: CircularProgressIndicator())
-            else if (error)
-              const Center(
-                child: Text(
-                  'Gagal memuat data riwayat absen.',
-                  style: TextStyle(color: Colors.red),
-                ),
-              )
-            else if (riwayatAbsen.isEmpty)
-              const Center(
-                child: Text('Tidak ada data riwayat absen.'),
-              )
-            else
-              Expanded(
-                child: ListView.builder(
-                  itemCount: riwayatAbsen.length,
-                  itemBuilder: (context, index) {
-                    final absen = riwayatAbsen[index];
-                    final keterlambatan = _hitungKeterlambatan(absen['masuk']!);
+            Expanded(
+              child: loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : riwayatAbsen.isEmpty
+                      ? const Center(
+                          child: Text('Tidak ada data riwayat absen.'),
+                        )
+                      : ListView.builder(
+                          itemCount: riwayatAbsen.length,
+                          itemBuilder: (context, index) {
+                            final absen = riwayatAbsen[index];
+                            final keterlambatan =
+                                _hitungKeterlambatan(absen['masuk']!);
 
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
-                        title: Text('Tanggal: ${absen['tanggal']}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Masuk: ${absen['masuk']}'),
-                            if (keterlambatan.isNotEmpty)
-                              Text(
-                                keterlambatan,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 14,
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 3,
+                              child: ListTile(
+                                title: Text('Tanggal: ${absen['tanggal']}'),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Masuk: ${absen['masuk']}'),
+                                    if (keterlambatan.isNotEmpty)
+                                      Text(
+                                        keterlambatan,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                  ],
                                 ),
                               ),
-                          ],
+                            );
+                          },
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+            ),
           ],
         ),
       ),

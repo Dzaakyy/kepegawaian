@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,9 +13,9 @@ class AbsenPulang extends StatefulWidget {
 
 class _AbsenPulangState extends State<AbsenPulang> {
   List<Map<String, String>> riwayatAbsenPulang = [];
-  bool loading = false;
-  bool error = false;
   bool sudahAbsenPulang = false;
+  bool loading = true;
+  bool sudahAbsenMasukHariIni = false;
 
   @override
   void initState() {
@@ -25,17 +26,19 @@ class _AbsenPulangState extends State<AbsenPulang> {
   Future<void> _riwayatAbsenPulang() async {
     setState(() {
       loading = true;
-      error = false;
     });
 
     String urlRiwayatAbsenPulang =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
+        'http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsenPulang));
 
       if (response.statusCode == 200) {
         final List<dynamic> responseData = jsonDecode(response.body);
+        if (kDebugMode) {
+          print('Data dari API: $responseData');
+        }
         setState(() {
           riwayatAbsenPulang = responseData.map<Map<String, String>>((item) {
             return {
@@ -45,27 +48,27 @@ class _AbsenPulangState extends State<AbsenPulang> {
             };
           }).toList();
 
-          
           sudahAbsenPulang = _cekSudahAbsenPulangHariIni();
+          sudahAbsenMasukHariIni = _cekSudahAbsenMasukHariIni();
+          loading = false;
         });
       } else {
-        setState(() {
-          error = true;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        error = true;
-      });
-    } finally {
-      if (mounted) {
+        if (kDebugMode) {
+          print('Status code: ${response.statusCode}');
+        }
         setState(() {
           loading = false;
         });
       }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error: $e');
+      }
+      setState(() {
+        loading = false;
+      });
     }
   }
-
 
   bool _cekSudahAbsenPulangHariIni() {
     var today = _getHariIni();
@@ -73,29 +76,29 @@ class _AbsenPulangState extends State<AbsenPulang> {
         absen['tanggal'] == today && absen['pulang'] != 'Tidak ada data');
   }
 
-
   bool _cekSudahAbsenMasukHariIni() {
     var today = _getHariIni();
     return riwayatAbsenPulang.any((absen) =>
         absen['tanggal'] == today && absen['masuk'] != 'Tidak ada data');
   }
 
-
   String _getHariIni() {
     var now = DateTime.now();
     return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   }
 
-  Future<void> _absenPulang() async {
-    if (loading || sudahAbsenPulang) return;
+  bool _waktuPulang() {
+    final now = DateTime.now();
+    final jamPulang = DateTime(now.year, now.month, now.day, 14, 0);
+    return now.isAfter(jamPulang);
+  }
 
-    setState(() {
-      loading = true;
-    });
+  Future<void> _absenPulang() async {
+    if (sudahAbsenPulang) return;
 
     var tanggal = _getHariIni();
     var waktuPulang = '${DateTime.now().hour}:${DateTime.now().minute}';
-    var urlAbsenPulang = 'http://10.0.3.2/kepegawaian_dzaky/absen_pulang.php';
+    var urlAbsenPulang = 'http://10.0.2.2/kepegawaian_dzaky/absen_pulang.php';
 
     try {
       var response = await http.post(Uri.parse(urlAbsenPulang), body: {
@@ -109,6 +112,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(responseData['message'] ?? 'Absen Berhasil'),
+              backgroundColor: Colors.green,
             ),
           );
 
@@ -122,6 +126,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Gagal melakukan absen. Silahkan coba lagi.'),
+              backgroundColor: Colors.red,
             ),
           );
         }
@@ -131,51 +136,64 @@ class _AbsenPulangState extends State<AbsenPulang> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Terjadi kesalahan: ${e.toString()}'),
+            backgroundColor: Colors.red,
           ),
         );
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    bool sudahAbsenMasukHariIni = _cekSudahAbsenMasukHariIni();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Absen Pulang'),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue.shade700, Colors.blue.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+        title: const Text(
+          'Absen Pulang',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        elevation: 10,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             ElevatedButton(
-              onPressed: (loading || sudahAbsenPulang || !sudahAbsenMasukHariIni)
+              onPressed: (sudahAbsenPulang ||
+                      !sudahAbsenMasukHariIni ||
+                      !_waktuPulang())
                   ? null
                   : _absenPulang,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.blueAccent,
                 minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 15),
               ),
-              child: loading
-                  ? const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    )
-                  : Text(
-                      sudahAbsenPulang
-                          ? 'Sudah Absen Pulang Hari Ini'
-                          : sudahAbsenMasukHariIni
-                              ? 'Absen Pulang'
-                              : 'Belum Absen Masuk',
-                      style: const TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+              child: Text(
+                sudahAbsenPulang
+                    ? 'Sudah Absen Pulang Hari Ini'
+                    : !_waktuPulang()
+                        ? 'Belum Waktunya Absen Pulang'
+                        : sudahAbsenMasukHariIni
+                            ? 'Absen Pulang'
+                            : 'Belum Absen Masuk',
+                style: const TextStyle(fontSize: 18, color: Colors.white),
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -185,37 +203,40 @@ class _AbsenPulangState extends State<AbsenPulang> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
-            if (loading)
-              const Center(child: CircularProgressIndicator())
-            else if (error)
-              const Center(
-                child: Text(
-                  'Gagal memuat data riwayat absen pulang.',
-                  style: TextStyle(color: Colors.red),
-                ),
-              )
-            else if (riwayatAbsenPulang.isEmpty)
-              const Center(
-                child: Text('Tidak ada data riwayat absen pulang.'),
-              )
-            else
-              Expanded(
-                child: ListView.builder(
-                  itemCount: riwayatAbsenPulang.length,
-                  itemBuilder: (context, index) {
-                    var absen = riwayatAbsenPulang[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      child: ListTile(
-                        title: Text('Tanggal: ${absen['tanggal']}'),
-                        subtitle: Text(
-                            'Masuk: ${absen['masuk']}\nPulang: ${absen['pulang']}'),
-                      ),
-                    );
-                  },
-                ),
+            Text(
+              'Jam Pulang: 17:00',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
               ),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : riwayatAbsenPulang.isEmpty
+                      ? const Center(
+                          child: Text('Tidak ada data riwayat absen pulang.'),
+                        )
+                      : ListView.builder(
+                          itemCount: riwayatAbsenPulang.length,
+                          itemBuilder: (context, index) {
+                            var absen = riwayatAbsenPulang[index];
+                            return Card(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 3,
+                              child: ListTile(
+                                title: Text('Tanggal: ${absen['tanggal']}'),
+                                subtitle: Text(
+                                    'Masuk: ${absen['masuk']}\nPulang: ${absen['pulang']}'),
+                              ),
+                            );
+                          },
+                        ),
+            ),
           ],
         ),
       ),

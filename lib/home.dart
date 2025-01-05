@@ -5,7 +5,6 @@ import 'package:kepegawaian/homepage.dart';
 
 class HomeScreen extends StatefulWidget {
   final int idKaryawan;
-
   const HomeScreen({super.key, required this.idKaryawan});
 
   @override
@@ -13,16 +12,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int myIndex = 0;
+  int myIndex = 1; 
   late List<Widget> widgetList;
 
   @override
   void initState() {
     super.initState();
     widgetList = [
-      HomePage(idKaryawan: widget.idKaryawan),
       AbsenMasuk(idKaryawan: widget.idKaryawan),
-      AbsenPulang(idKaryawan: widget.idKaryawan)
+      HomePage(idKaryawan: widget.idKaryawan),  
+      AbsenPulang(idKaryawan: widget.idKaryawan) 
     ];
   }
 
@@ -44,9 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         currentIndex: myIndex,
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.login), label: 'Absen Masuk'),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.access_time), label: 'Absen'),
-          BottomNavigationBarItem(icon: Icon(Icons.assignment), label: 'Cuti'),
+          BottomNavigationBarItem(icon: Icon(Icons.logout), label: 'Absen Pulang'),
         ],
       ),
     );

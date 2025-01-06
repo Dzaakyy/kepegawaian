@@ -29,7 +29,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
     });
 
     String urlRiwayatAbsenPulang =
-        'http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
+        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsenPulang));
@@ -98,7 +98,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
     var tanggal = _getHariIni();
     var waktuPulang = '${DateTime.now().hour}:${DateTime.now().minute}';
-    var urlAbsenPulang = 'http://10.0.2.2/kepegawaian_dzaky/absen_pulang.php';
+    var urlAbsenPulang = 'http://10.0.3.2/kepegawaian_dzaky/absen_pulang.php';
 
     try {
       var response = await http.post(Uri.parse(urlAbsenPulang), body: {

@@ -19,7 +19,7 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
   Future<void> _addIde() async {
   final now = DateTime.now();
   final tanggal = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-  String urlIde = 'http://10.0.2.2/kepegawaian_dzaky/add_ide_kreatif.php';
+  String urlIde = 'http://10.0.3.2/kepegawaian_dzaky/add_ide_kreatif.php';
   try {
     var response = await http.post(Uri.parse(urlIde), body: {
       "karyawan_id": widget.idKaryawan.toString(),

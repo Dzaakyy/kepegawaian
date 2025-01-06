@@ -19,7 +19,7 @@ class _AddLaporanState extends State<AddLaporan> {
     final now = DateTime.now();
     final tanggal =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    String urlLaporan = 'http://10.0.2.2/kepegawaian_dzaky/add_laporan.php';
+    String urlLaporan = 'http://10.0.3.2/kepegawaian_dzaky/add_laporan.php';
     try {
       var response = await http.post(Uri.parse(urlLaporan), body: {
         "karyawan_id": widget.idKaryawan.toString(),

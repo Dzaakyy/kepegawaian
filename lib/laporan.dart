@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -36,7 +35,7 @@ class _LaporanState extends State<Laporan> {
       });
     } catch (exc) {
       if (kDebugMode) {
-        print("Error: $exc"); 
+        print("Error: $exc");
       }
     }
   }
@@ -67,27 +66,27 @@ class _LaporanState extends State<Laporan> {
     }
   }
 
-Future<void> searchLaporan() async {
-  final search = searchlaporanHarian.text;
-  if (search.isEmpty) {
-    _laporanHarian(); 
-    return;
-  }
+  Future<void> searchLaporan() async {
+    final search = searchlaporanHarian.text;
+    if (search.isEmpty) {
+      _laporanHarian();
+      return;
+    }
 
-  String urlSearch =
-      "http://10.0.2.2/kepegawaian_dzaky/search_laporan.php?search=$search";
-  try {
-    var responseSearch = await http.get(Uri.parse(urlSearch));
-    final List listSearch = jsonDecode(responseSearch.body);
-    setState(() {
-      listLaporan = listSearch;
-    });
-  } catch (exc) {
-    if (kDebugMode) {
-      print("Failed to load Laporan: $exc");
+    String urlSearch =
+        "http://10.0.2.2/kepegawaian_dzaky/search_laporan.php?search=$search";
+    try {
+      var responseSearch = await http.get(Uri.parse(urlSearch));
+      final List listSearch = jsonDecode(responseSearch.body);
+      setState(() {
+        listLaporan = listSearch;
+      });
+    } catch (exc) {
+      if (kDebugMode) {
+        print("Failed to load Laporan: $exc");
+      }
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -150,8 +149,6 @@ Future<void> searchLaporan() async {
                 itemCount: listLaporan.length,
                 itemBuilder: (context, index) {
                   var laporan = listLaporan[index];
-                  Color cardColor =
-                      index % 2 == 0 ? Colors.blue[50]! : Colors.lightBlue[50]!;
                   return Card(
                     key: Key(laporan['id_laporan'].toString()),
                     margin: const EdgeInsets.only(bottom: 16.0),
@@ -159,7 +156,7 @@ Future<void> searchLaporan() async {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    color: cardColor,
+                    color: Colors.blue[50], 
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
@@ -176,7 +173,7 @@ Future<void> searchLaporan() async {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            laporan['aktivitas'] ?? 'aktivitas tidak tersedia',
+                            laporan['aktivitas'] ?? 'Aktivitas tidak tersedia',
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.black,
@@ -184,20 +181,19 @@ Future<void> searchLaporan() async {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                              "Dibuat oleh: ${laporan['nama'] ?? 'Nama tidak tersedia'}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.blue,
-                              ),
-                            ),
-
-                          Text(
-                            "tanggal: ${laporan['tanggal'] ?? 'Nama tidak tersedia'}",
+                            "Dibuat oleh: ${laporan['nama'] ?? 'Nama tidak tersedia'}",
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 87, 97, 105),
+                              color: Colors.blue,
+                            ),
+                          ),
+                          Text(
+                            "Tanggal: ${laporan['tanggal'] ?? 'Tanggal tidak tersedia'}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey.shade600,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -233,7 +229,7 @@ Future<void> searchLaporan() async {
                                       color: Colors.red),
                                   onPressed: () {
                                     deletelaporan(
-                                        laporan['id_laoran'].toString());
+                                        laporan['id_laporan'].toString());
                                   },
                                 ),
                             ],

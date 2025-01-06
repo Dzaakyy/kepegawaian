@@ -159,40 +159,47 @@ class _HomePageState extends State<HomePage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Card untuk Absen Masuk
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.green.shade400, Colors.green.shade700],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                children: [
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.login,
-                          size: 40,
-                          color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue.shade400, Colors.blue.shade700],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const Icon(
+                                Icons.login,
+                                size: 40,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
                               const Text(
-                                'Status Absen Masuk Hari Ini',
+                                'Absen Masuk',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -202,53 +209,51 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 5),
                               Text(
                                 sudahAbsenHariIni
-                                    ? 'Anda sudah absen masuk pada pukul $jamAbsenMasuk'
-                                    : 'Anda belum absen masuk hari ini',
+                                    ? 'Sudah absen pada $jamAbsenMasuk'
+                                    : 'Belum absen hari ini',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.white70,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.red.shade400, Colors.red.shade700],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.logout,
-                          size: 40,
-                          color: Colors.white,
+                    child: InkWell(
+                      onTap: () {
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue.shade400, Colors.blue.shade700],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        const SizedBox(width: 16),
-                        Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              const Icon(
+                                Icons.logout,
+                                size: 40,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(height: 10),
                               const Text(
-                                'Status Absen Pulang Hari Ini',
+                                'Absen Pulang',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -258,69 +263,71 @@ class _HomePageState extends State<HomePage> {
                               const SizedBox(height: 5),
                               Text(
                                 jamAbsenPulang.isNotEmpty
-                                    ? 'Anda sudah absen pulang pada pukul $jamAbsenPulang'
-                                    : 'Anda belum absen pulang hari ini',
+                                    ? 'Sudah absen pada $jamAbsenPulang'
+                                    : 'Belum absen pulang',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.white70,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              Row(
-                children: [
-                  // Card Ide Kreatif
-                  Expanded(
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  IdeKreatif(idKaryawan: idKaryawan),
-                            ),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(15),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => IdeKreatif(idKaryawan: idKaryawan),
+                          ),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue.shade400, Colors.blue.shade700],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.lightbulb_outline,
                                 size: 40,
-                                color: Colors.blue,
+                                color: Colors.white,
                               ),
-                              const SizedBox(height: 10),
-                              const Text(
+                              SizedBox(height: 10),
+                              Text(
                                 'Ide Kreatif',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                              SizedBox(height: 5),
                               Text(
-                                'Ajukan ide kreatif Anda',
+                                'Ajukan ide kreatif',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey.shade700,
+                                  color: Colors.white70,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
@@ -328,51 +335,57 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 15),
-                  // Card Laporan Harian
-                  Expanded(
-                    child: Card(
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  Laporan(idKaryawan: idKaryawan),
-                            ),
-                          );
-                        },
-                        borderRadius: BorderRadius.circular(15),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
+                  Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Laporan(idKaryawan: idKaryawan),
+                          ),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.blue.shade400, Colors.blue.shade700],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(16),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.book,
                                 size: 40,
-                                color: Colors.blue,
+                                color: Colors.white,
                               ),
-                              const SizedBox(height: 10),
-                              const Text(
+                              SizedBox(height: 10),
+                              Text(
                                 'Laporan Harian',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                              SizedBox(height: 5),
                               Text(
-                                'Upload laporan harian Anda',
+                                'Upload laporan harian',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey.shade700,
+                                  color: Colors.white70,
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),

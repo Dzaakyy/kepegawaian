@@ -89,7 +89,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
   bool _waktuPulang() {
     final now = DateTime.now();
-    final jamPulang = DateTime(now.year, now.month, now.day, 14, 0);
+    final jamPulang = DateTime(now.year, now.month, now.day, 13, 0);
     return now.isAfter(jamPulang);
   }
 

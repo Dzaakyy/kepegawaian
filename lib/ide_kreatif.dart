@@ -146,8 +146,6 @@ class _IdeKaretifState extends State<IdeKreatif> {
                 itemCount: listIde.length,
                 itemBuilder: (context, index) {
                   var ide = listIde[index];
-                  Color cardColor =
-                      index % 2 == 0 ? Colors.blue[50]! : Colors.lightBlue[50]!;
                   return Card(
                     key: Key(ide['id_ide'].toString()),
                     margin: const EdgeInsets.only(bottom: 16.0),
@@ -155,101 +153,95 @@ class _IdeKaretifState extends State<IdeKreatif> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    color: cardColor,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.lightbulb_outline,
-                                  size: 30,
-                                  color: Colors.blue,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    ide['judul_ide'] ?? 'Judul tidak tersedia',
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                if (int.parse(ide['karyawan_id'].toString()) ==
-                                    widget.idKaryawan)
-                                  IconButton(
-                                    icon: const Icon(Icons.delete,
-                                        color: Colors.red),
-                                    onPressed: () {
-                                      deleteide(ide['id_ide'].toString());
-                                    },
-                                  ),
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-
-                            Text(
-                              ide['deskripsi'] ?? 'Deskripsi tidak tersedia',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            Text(
-                              "Kategori: ${ide['kategori'] ?? 'Kategori tidak tersedia'}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            Text(
-                              "Dibuat oleh: ${ide['nama'] ?? 'Nama tidak tersedia'}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                    color: Colors.blue[50], 
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.lightbulb_outline,
+                                size: 30,
                                 color: Colors.blue,
                               ),
-                            ),
-                            const SizedBox(height: 12),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    // Navigasi ke halaman detail
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailIdeKreatif(ide: ide),
-                                      ),
-                                    );
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.blue,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Lihat Detail',
-                                    style: TextStyle(color: Colors.white),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  ide['judul_ide'] ?? 'Judul tidak tersedia',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
+                              ),
+                              if (int.parse(ide['karyawan_id'].toString()) ==
+                                  widget.idKaryawan)
+                                IconButton(
+                                  icon: const Icon(Icons.delete,
+                                      color: Colors.red),
+                                  onPressed: () {
+                                    deleteide(ide['id_ide'].toString());
+                                  },
+                                ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            ide['deskripsi'] ?? 'Deskripsi tidak tersedia',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.black,
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Kategori: ${ide['kategori'] ?? 'Kategori tidak tersedia'}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Dibuat oleh: ${ide['nama'] ?? 'Nama tidak tersedia'}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.blue,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailIdeKreatif(ide: ide),
+                                    ),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Lihat Detail',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    
+                    ),
                   );
                 },
               ),

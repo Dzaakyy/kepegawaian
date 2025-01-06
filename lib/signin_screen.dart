@@ -173,7 +173,6 @@ import 'package:shared_preferences/shared_preferences.dart';
                                 TextFormField(
                                   controller: _passwordController,
                                   obscureText: true,
-                                  obscuringCharacter: '*',
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Please enter Password';

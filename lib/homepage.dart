@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kepegawaian/acara_perusahaan.dart';
 import 'package:kepegawaian/accountpage.dart';
 import 'package:kepegawaian/ide_kreatif.dart';
+import 'package:kepegawaian/laporan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -274,35 +275,37 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 20),
 
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => IdeKreatif(idKaryawan: idKaryawan),
+              Row(
+                children: [
+                  // Card Ide Kreatif
+                  Expanded(
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(15),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.lightbulb_outline,
-                          size: 40,
-                          color: Colors.blue,
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  IdeKreatif(idKaryawan: idKaryawan),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(15),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const Icon(
+                                Icons.lightbulb_outline,
+                                size: 40,
+                                color: Colors.blue,
+                              ),
+                              const SizedBox(height: 10),
                               const Text(
                                 'Ide Kreatif',
                                 style: TextStyle(
@@ -322,18 +325,64 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20,
-                          color: Colors.grey,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 15),
+                  // Card Laporan Harian
+                  Expanded(
+                    child: Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Laporan(idKaryawan: idKaryawan),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(15),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.book,
+                                size: 40,
+                                color: Colors.blue,
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Laporan Harian',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Upload laporan harian Anda',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
-
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(

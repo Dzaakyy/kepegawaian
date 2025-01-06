@@ -13,7 +13,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  Map<String, dynamic> profileData = {}; 
+  Map<String, dynamic> profileData = {};
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _AccountPageState extends State<AccountPage> {
         final data = jsonDecode(response.body);
         if (data['status'] == 'success') {
           setState(() {
-            profileData = data['data']; 
+            profileData = data['data'];
           });
         } else {
           throw Exception(data['message']);
@@ -43,13 +43,6 @@ class _AccountPageState extends State<AccountPage> {
         SnackBar(content: Text('Error: $e')),
       );
     }
-  }
-
-  Future<void> _logout() async {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const SignInScreen()),
-    );
   }
 
   @override
@@ -91,7 +84,6 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-
                 Center(
                   child: Text(
                     profileData['nama'],
@@ -102,8 +94,6 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-         
                 Center(
                   child: Text(
                     profileData['jabatan'] ?? 'Tidak ada data',
@@ -114,7 +104,6 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 24),
-
                 Card(
                   elevation: 4,
                   shape: RoundedRectangleBorder(
@@ -150,7 +139,6 @@ class _AccountPageState extends State<AccountPage> {
                           ],
                         ),
                         const SizedBox(height: 16),
-
                         Row(
                           children: [
                             const Icon(Icons.phone, color: Colors.blue),
@@ -177,10 +165,10 @@ class _AccountPageState extends State<AccountPage> {
                           ],
                         ),
                         const SizedBox(height: 16),
-
                         Row(
                           children: [
-                            const Icon(Icons.calendar_today, color: Colors.blue),
+                            const Icon(Icons.calendar_today,
+                                color: Colors.blue),
                             const SizedBox(width: 16),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +181,8 @@ class _AccountPageState extends State<AccountPage> {
                                   ),
                                 ),
                                 Text(
-                                  profileData['tanggal_mulai'] ?? 'Tidak ada data',
+                                  profileData['tanggal_mulai'] ??
+                                      'Tidak ada data',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -208,12 +197,16 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-
-               
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _logout,
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignInScreen()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(vertical: 16),

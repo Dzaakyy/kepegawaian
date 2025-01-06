@@ -17,15 +17,8 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
   final _kategori = TextEditingController();
 
   Future<void> _addIde() async {
-  if (_judulIde.text.isEmpty ||
-      _deskripsi.text.isEmpty ||
-      _kategori.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Harap isi semua field!")),
-    );
-    return;
-  }
-
+  final now = DateTime.now();
+  final tanggal = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
   String urlIde = 'http://10.0.2.2/kepegawaian_dzaky/add_ide_kreatif.php';
   try {
     var response = await http.post(Uri.parse(urlIde), body: {
@@ -33,17 +26,16 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
       "judul_ide": _judulIde.text.toString(),
       "deskripsi": _deskripsi.text.toString(),
       "kategori": _kategori.text.toString(),
+      "tanggal": tanggal,
     });
-
     if (kDebugMode) {
       print("Respons dari server: ${response.body}");
     }
 
     var bodyAddIde = jsonDecode(response.body);
     if (bodyAddIde['message'] == "Ide Kretaif succesfully added") {
-      // Kembalikan nilai true ke halaman sebelumnya
       // ignore: use_build_context_synchronously
-      Navigator.pop(context, true); // <-- Kembalikan nilai true
+      Navigator.pop(context, true);
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(

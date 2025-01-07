@@ -21,7 +21,7 @@ class _AcaraPerusahaanState extends State<AcaraPerusahaan> {
   }
 
   Future<void> _jadwalAcara() async {
-    const urlLibur = "http://10.0.3.2/kepegawaian_dzaky/acara_perusahaan.php";
+    String urlLibur = "http://10.0.3.2/kepegawaian_dzaky/acara_perusahaan.php";
     try {
       var response = await http.get(Uri.parse(urlLibur));
       setState(() {
@@ -60,14 +60,14 @@ class _AcaraPerusahaanState extends State<AcaraPerusahaan> {
     return Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade700, Colors.blue.shade400],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
+        ),
+      ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () => Navigator.pop(context),

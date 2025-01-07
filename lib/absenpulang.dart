@@ -29,7 +29,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
     });
 
     String urlRiwayatAbsenPulang =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
+        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsenPulang));
@@ -89,7 +89,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
   bool _waktuPulang() {
     final now = DateTime.now();
-    final jamPulang = DateTime(now.year, now.month, now.day, 13, 0);
+    final jamPulang = DateTime(now.year, now.month, now.day, 9, 0);
     return now.isAfter(jamPulang);
   }
 
@@ -102,7 +102,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
     try {
       var response = await http.post(Uri.parse(urlAbsenPulang), body: {
-        'karyawan_id': widget.idKaryawan.toString(),
+        'pegawai_id': widget.idKaryawan.toString(),
         'tanggal': tanggal,
         'jam_keluar': waktuPulang,
       });
@@ -147,15 +147,16 @@ class _AbsenPulangState extends State<AbsenPulang> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue.shade700, Colors.blue.shade400],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
+      ),
         title: const Text(
           'Absen Pulang',
           style: TextStyle(
@@ -231,7 +232,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
                               child: ListTile(
                                 title: Text('Tanggal: ${absen['tanggal']}'),
                                 subtitle: Text(
-                                    'Masuk: ${absen['masuk']}\nPulang: ${absen['pulang']}'),
+                                    'Pulang: ${absen['pulang']}'),
                               ),
                             );
                           },

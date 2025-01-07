@@ -89,15 +89,15 @@ class _IdeKaretifState extends State<IdeKreatif> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue.shade700, Colors.blue.shade400],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+       flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
+      ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -176,7 +176,7 @@ class _IdeKaretifState extends State<IdeKreatif> {
                                   ),
                                 ),
                               ),
-                              if (int.parse(ide['karyawan_id'].toString()) ==
+                              if (int.parse(ide['pegawai_id'].toString()) ==
                                   widget.idKaryawan)
                                 IconButton(
                                   icon: const Icon(Icons.delete,

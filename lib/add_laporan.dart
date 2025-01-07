@@ -22,7 +22,7 @@ class _AddLaporanState extends State<AddLaporan> {
     String urlLaporan = 'http://10.0.3.2/kepegawaian_dzaky/add_laporan.php';
     try {
       var response = await http.post(Uri.parse(urlLaporan), body: {
-        "karyawan_id": widget.idKaryawan.toString(),
+        "pegawai_id": widget.idKaryawan.toString(),
         "aktivitas": _aktivitas.text.toString(),
         "tanggal": tanggal,
       });

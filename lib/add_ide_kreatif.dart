@@ -22,7 +22,7 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
   String urlIde = 'http://10.0.3.2/kepegawaian_dzaky/add_ide_kreatif.php';
   try {
     var response = await http.post(Uri.parse(urlIde), body: {
-      "karyawan_id": widget.idKaryawan.toString(),
+      "pegawai_id": widget.idKaryawan.toString(),
       "judul_ide": _judulIde.text.toString(),
       "deskripsi": _deskripsi.text.toString(),
       "kategori": _kategori.text.toString(),
@@ -58,14 +58,14 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue, Colors.lightBlue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
+      ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -76,7 +76,7 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -124,6 +124,6 @@ class _AddIdeKreatifState extends State<AddIdeKreatif> {
           ],
         ),
       ),
-    );
+      );
   }
 }

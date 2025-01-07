@@ -14,7 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
     }
 
     class _SignInScreenState extends State<SignInScreen> {
-      bool rememberPassword = true;
       final TextEditingController _usernameController = TextEditingController();
       final TextEditingController _passwordController = TextEditingController();
 
@@ -37,7 +36,7 @@ import 'package:shared_preferences/shared_preferences.dart';
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.setString('namaUser', dataLogin['data']['nama']);
             prefs.setString('jabatanUser', dataLogin['data']['jabatan']);
-            prefs.setInt('idKaryawan', dataLogin['data']['id_karyawan']);
+            prefs.setInt('idKaryawan', dataLogin['data']['id_pegawai']);
 
           // ignore: use_build_context_synchronously
               ScaffoldMessenger.of(context).showSnackBar(
@@ -56,7 +55,7 @@ import 'package:shared_preferences/shared_preferences.dart';
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomeScreen(
-                    idKaryawan: dataLogin['data']['id_karyawan'], 
+                    idKaryawan: dataLogin['data']['id_pegawai'], 
                   ),
                 ),
               );

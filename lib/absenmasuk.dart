@@ -23,44 +23,22 @@ class _AbsenMasukState extends State<AbsenMasuk> {
   }
 
   Future<void> _riwayatAbsen() async {
-    setState(() {
-      loading = true;
-    });
-
-    String urlRiwayatAbsen =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
-
+    String url =
+        "http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}";
     try {
-      final response = await http.get(Uri.parse(urlRiwayatAbsen));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(response.body);
-        setState(() {
-          riwayatAbsen = responseData.map<Map<String, String>>((item) {
-            return {
-              'tanggal': item['tanggal'] ?? 'Tidak ada data',
-              'masuk': item['jam_masuk'] ?? 'Tidak ada data',
-            };
-          }).toList();
-
-          final now = DateTime.now();
-          final today =
-              '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-
-          sudahAbsenHariIni =
-              riwayatAbsen.any((absen) => absen['tanggal'] == today);
-        });
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error: $e');
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          loading = false;
-        });
-      }
+      var response = await http.get(Uri.parse(url));
+      setState(() {
+        riwayatAbsen = (jsonDecode(response.body) as List)
+            .map<Map<String, String>>((item) => {
+                  'tanggal': item['tanggal'] ?? 'Tidak ada data',
+                  'masuk': item['jam_masuk'] ?? 'Tidak ada data',
+                })
+            .toList();
+        sudahAbsenHariIni = riwayatAbsen.any((absen) =>
+            absen['tanggal'] == DateTime.now().toString().substring(0, 10));
+      });
+    } catch (exc) {
+      if (kDebugMode) print(exc);
     }
   }
 
@@ -75,13 +53,13 @@ class _AbsenMasukState extends State<AbsenMasuk> {
     final tanggal =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     final waktuMasuk = '${now.hour}:${now.minute}';
-    const urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen_masuk.php';
+    String urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen_masuk.php';
 
     try {
       final response = await http.post(
         Uri.parse(urlAbsen),
         body: {
-          'karyawan_id': widget.idKaryawan.toString(),
+          'pegawai_id': widget.idKaryawan.toString(),
           'tanggal': tanggal,
           'jam_masuk': waktuMasuk,
         },
@@ -154,15 +132,16 @@ class _AbsenMasukState extends State<AbsenMasuk> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue.shade700, Colors.blue.shade400],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
+      ),
         title: const Text(
           'Absen Masuk',
           style: TextStyle(color: Colors.white),

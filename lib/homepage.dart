@@ -6,7 +6,7 @@ import 'package:kepegawaian/acara_perusahaan.dart';
 import 'package:kepegawaian/accountpage.dart';
 import 'package:kepegawaian/ide_kreatif.dart';
 import 'package:kepegawaian/laporan.dart';
-import 'package:kepegawaian/karyawan.dart';
+import 'package:kepegawaian/pegawai.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _cekAbsenHariIni() async {
     String today = _getHariIni();
     String urlRiwayatAbsen =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?karyawan_id=${widget.idKaryawan}';
+        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsen));
@@ -97,7 +97,7 @@ Widget build(BuildContext context) {
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade700, Colors.blue.shade400],
+            colors: [Colors.blue.shade900, Colors.blue.shade600],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -115,7 +115,7 @@ Widget build(BuildContext context) {
         },
         icon: const Icon(
           CupertinoIcons.person_alt,
-          size: 22,
+          size: 24,
           color: Colors.white,
         ),
       ),
@@ -125,7 +125,7 @@ Widget build(BuildContext context) {
           Text(
             namaUser,
             style: const TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
@@ -133,7 +133,7 @@ Widget build(BuildContext context) {
           Text(
             jabatanUser,
             style: const TextStyle(
-              fontSize: 12,
+              fontSize: 14,
               color: Colors.white70,
               fontWeight: FontWeight.normal,
             ),
@@ -152,7 +152,7 @@ Widget build(BuildContext context) {
           },
           icon: const Icon(
             CupertinoIcons.calendar,
-            size: 22,
+            size: 24,
             color: Colors.white,
           ),
         ),
@@ -163,26 +163,23 @@ Widget build(BuildContext context) {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            // Baris pertama: Absen Masuk dan Absen Pulang
             GridView.count(
-              crossAxisCount: 2, // 2 card per baris
+              crossAxisCount: 2,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
-              childAspectRatio: 1.2, // Sesuaikan aspek rasio
+              childAspectRatio: 1.2,
               children: [
-                // Card Absen Masuk
                 Card(
-                  elevation: 4,
+                  elevation: 6,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      // Logika absen masuk
-                    },
                     borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -229,17 +226,15 @@ Widget build(BuildContext context) {
                     ),
                   ),
                 ),
-                // Card Absen Pulang
                 Card(
-                  elevation: 4,
+                  elevation: 6,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: InkWell(
-                    onTap: () {
-                      // Logika absen pulang
-                    },
                     borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -289,22 +284,21 @@ Widget build(BuildContext context) {
               ],
             ),
             const SizedBox(height: 16),
-            // Baris kedua: Ide Kreatif, Laporan Harian, dan Pegawai
             GridView.count(
-              crossAxisCount: 3, // 3 card per baris
+              crossAxisCount: 3,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
-              childAspectRatio: 0.9, // Sesuaikan aspek rasio
+              childAspectRatio: 0.9,
               children: [
-                // Card Ide Kreatif
                 Card(
-                  elevation: 4,
+                  elevation: 6,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(15),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -313,11 +307,10 @@ Widget build(BuildContext context) {
                         ),
                       );
                     },
-                    borderRadius: BorderRadius.circular(15),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blue.shade400, Colors.blue.shade700],
+                          colors: [Colors.green.shade400, Colors.green.shade700],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -349,13 +342,13 @@ Widget build(BuildContext context) {
                     ),
                   ),
                 ),
-                // Card Laporan Harian
                 Card(
-                  elevation: 4,
+                  elevation: 6,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(15),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -364,11 +357,10 @@ Widget build(BuildContext context) {
                         ),
                       );
                     },
-                    borderRadius: BorderRadius.circular(15),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blue.shade400, Colors.blue.shade700],
+                          colors: [Colors.orange.shade400, Colors.orange.shade700],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -400,26 +392,25 @@ Widget build(BuildContext context) {
                     ),
                   ),
                 ),
-                // Card Pegawai
                 Card(
-                  elevation: 4,
+                  elevation: 6,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: InkWell(
+                    borderRadius: BorderRadius.circular(15),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const Karyawan(),
+                          builder: (context) => const Pegawai(),
                         ),
                       );
                     },
-                    borderRadius: BorderRadius.circular(15),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.blue.shade400, Colors.blue.shade700],
+                          colors: [Colors.purple.shade400, Colors.purple.shade700],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -454,9 +445,8 @@ Widget build(BuildContext context) {
               ],
             ),
             const SizedBox(height: 20),
-            // List Departemen
             Card(
-              elevation: 4,
+              elevation: 6,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -468,7 +458,7 @@ Widget build(BuildContext context) {
                     const Text(
                       'Departemen dan Lokasi',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),

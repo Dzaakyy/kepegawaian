@@ -24,7 +24,7 @@ class _IdeKaretifState extends State<IdeKreatif> {
   }
 
   Future<void> _ideKreatif() async {
-    String urlIde = 'http://10.0.3.2/kepegawaian_dzaky/ide_kreatif.php';
+    String urlIde = 'http://10.0.2.2/kepegawaian_dzaky/ide_kreatif.php';
     try {
       var response = await http.get(Uri.parse(urlIde));
       listIde = jsonDecode(response.body);
@@ -40,7 +40,7 @@ class _IdeKaretifState extends State<IdeKreatif> {
 
   Future<void> deleteide(String id) async {
     String urlDelete =
-        "http://10.0.3.2/kepegawaian_dzaky/delete_ide_kreatif.php";
+        "http://10.0.2.2/kepegawaian_dzaky/delete_ide_kreatif.php";
     try {
       var respponseDelete =
           await http.post(Uri.parse(urlDelete), body: {"id_ide": id});
@@ -71,7 +71,7 @@ class _IdeKaretifState extends State<IdeKreatif> {
       return;
     }
     String urlSearch =
-        "http://10.0.3.2/kepegawaian_dzaky/search_ide_kreatif.php?search=$search";
+        "http://10.0.2.2/kepegawaian_dzaky/search_ide_kreatif.php?search=$search";
     try {
       var responseSearch = await http.get(Uri.parse(urlSearch));
       final List listSearch = jsonDecode(responseSearch.body);

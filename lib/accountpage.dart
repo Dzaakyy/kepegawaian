@@ -23,7 +23,7 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<void> _isiProfileData() async {
-    String url = 'http://10.0.3.2/kepegawaian_dzaky/profile.php?id_pegawai=${widget.idKaryawan}';
+    String url = 'http://10.0.2.2/kepegawaian_dzaky/profile.php?id_pegawai=${widget.idKaryawan}';
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {

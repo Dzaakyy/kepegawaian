@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
       final TextEditingController _passwordController = TextEditingController();
 
       Future<void> login() async {
-        String urlLogin = "http://10.0.3.2/kepegawaian_dzaky/login.php";
+        String urlLogin = "http://10.0.2.2/kepegawaian_dzaky/login.php";
         try {
           var response = await http.post(Uri.parse(urlLogin), body: {
             "username": _usernameController.text,

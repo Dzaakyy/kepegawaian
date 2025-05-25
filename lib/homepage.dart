@@ -45,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _departemen() async {
-    String urlDepartemen = "http://10.0.3.2/kepegawaian_dzaky/departemen.php";
+    String urlDepartemen = "http://10.0.2.2/kepegawaian_dzaky/departemen.php";
     try {
       var response = await http.get(Uri.parse(urlDepartemen));
       setState(() {
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _cekAbsenHariIni() async {
     String today = _getHariIni();
     String urlRiwayatAbsen =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
+        'http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsen));

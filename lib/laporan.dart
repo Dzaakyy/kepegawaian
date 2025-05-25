@@ -24,7 +24,7 @@ class _LaporanState extends State<Laporan> {
   }
 
   Future<void> _laporanHarian() async {
-    String urlLaporan = 'http://10.0.3.2/kepegawaian_dzaky/laporan.php';
+    String urlLaporan = 'http://10.0.2.2/kepegawaian_dzaky/laporan.php';
     try {
       var response = await http.get(Uri.parse(urlLaporan));
       if (kDebugMode) {
@@ -41,7 +41,7 @@ class _LaporanState extends State<Laporan> {
   }
 
   Future<void> deletelaporan(String id) async {
-    String urlDelete = "http://10.0.3.2/kepegawaian_dzaky/delete_laporan.php";
+    String urlDelete = "http://10.0.2.2/kepegawaian_dzaky/delete_laporan.php";
     try {
       var respponseDelete =
           await http.post(Uri.parse(urlDelete), body: {"id_laporan": id});
@@ -74,7 +74,7 @@ class _LaporanState extends State<Laporan> {
     }
 
     String urlSearch =
-        "http://10.0.3.2/kepegawaian_dzaky/search_laporan.php?search=$search";
+        "http://10.0.2.2/kepegawaian_dzaky/search_laporan.php?search=$search";
     try {
       var responseSearch = await http.get(Uri.parse(urlSearch));
       final List listSearch = jsonDecode(responseSearch.body);

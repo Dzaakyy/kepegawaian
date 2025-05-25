@@ -21,7 +21,7 @@ class _PegawaiState extends State<Pegawai> {
   }
 
   Future<void> _daftarPegawai() async {
-    String urlPegawai = "http://10.0.3.2/kepegawaian_dzaky/pegawai.php";
+    String urlPegawai = "http://10.0.2.2/kepegawaian_dzaky/pegawai.php";
     try {
       var response = await http.get(Uri.parse(urlPegawai));
       setState(() {
@@ -41,7 +41,7 @@ class _PegawaiState extends State<Pegawai> {
       return;
     }
     String urlSearch =
-        "http://10.0.3.2/kepegawaian_dzaky/search_pegawai.php?search=$search";
+        "http://10.0.2.2/kepegawaian_dzaky/search_pegawai.php?search=$search";
     try {
       var responseSearch = await http.get(Uri.parse(urlSearch));
       final List listSearch = jsonDecode(responseSearch.body);

@@ -19,7 +19,7 @@ class _AddLaporanState extends State<AddLaporan> {
     final now = DateTime.now();
     final tanggal =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
-    String urlLaporan = 'http://10.0.3.2/kepegawaian_dzaky/add_laporan.php';
+    String urlLaporan = 'http://10.0.2.2/kepegawaian_dzaky/add_laporan.php';
     try {
       var response = await http.post(Uri.parse(urlLaporan), body: {
         "pegawai_id": widget.idKaryawan.toString(),
@@ -32,6 +32,10 @@ class _AddLaporanState extends State<AddLaporan> {
 
       var bodyAddIde = jsonDecode(response.body);
       if (bodyAddIde['message'] == "Laporan succesfully added") {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Berhasil menambahkan Laporan.")),
+        );
         // ignore: use_build_context_synchronously
         Navigator.pop(context, true);
       } else {

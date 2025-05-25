@@ -29,7 +29,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
     });
 
     String urlRiwayatAbsenPulang =
-        'http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
+        'http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}';
 
     try {
       var response = await http.get(Uri.parse(urlRiwayatAbsenPulang));
@@ -89,7 +89,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
   bool _waktuPulang() {
     final now = DateTime.now();
-    final jamPulang = DateTime(now.year, now.month, now.day, 9, 0);
+    final jamPulang = DateTime(now.year, now.month, now.day, 13, 0);
     return now.isAfter(jamPulang);
   }
 
@@ -98,7 +98,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
 
     var tanggal = _getHariIni();
     var waktuPulang = '${DateTime.now().hour}:${DateTime.now().minute}';
-    var urlAbsenPulang = 'http://10.0.3.2/kepegawaian_dzaky/absen_pulang.php';
+    var urlAbsenPulang = 'http://10.0.2.2/kepegawaian_dzaky/absen_pulang.php';
 
     try {
       var response = await http.post(Uri.parse(urlAbsenPulang), body: {
@@ -205,7 +205,7 @@ class _AbsenPulangState extends State<AbsenPulang> {
               ),
             ),
             Text(
-              'Jam Pulang: 17:00',
+              'Jam Pulang: 13:00',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey[600],

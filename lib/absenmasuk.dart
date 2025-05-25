@@ -24,7 +24,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
 
   Future<void> _riwayatAbsen() async {
     String url =
-        "http://10.0.3.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}";
+        "http://10.0.2.2/kepegawaian_dzaky/riwayat_absen.php?pegawai_id=${widget.idKaryawan}";
     try {
       var response = await http.get(Uri.parse(url));
       setState(() {
@@ -53,7 +53,7 @@ class _AbsenMasukState extends State<AbsenMasuk> {
     final tanggal =
         '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
     final waktuMasuk = '${now.hour}:${now.minute}';
-    String urlAbsen = 'http://10.0.3.2/kepegawaian_dzaky/absen_masuk.php';
+    String urlAbsen = 'http://10.0.2.2/kepegawaian_dzaky/absen_masuk.php';
 
     try {
       final response = await http.post(

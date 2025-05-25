@@ -30,7 +30,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _submitForm() async {
-    const url = 'http://10.0.3.2/kepegawaian_dzaky/edit_profile.php';
+    const url = 'http://10.0.2.2/kepegawaian_dzaky/edit_profile.php';
     try {
       final response = await http.post(
         Uri.parse(url),

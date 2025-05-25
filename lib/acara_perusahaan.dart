@@ -21,7 +21,7 @@ class _AcaraPerusahaanState extends State<AcaraPerusahaan> {
   }
 
   Future<void> _jadwalAcara() async {
-    String urlLibur = "http://10.0.3.2/kepegawaian_dzaky/acara_perusahaan.php";
+    String urlLibur = "http://10.0.2.2/kepegawaian_dzaky/acara_perusahaan.php";
     try {
       var response = await http.get(Uri.parse(urlLibur));
       setState(() {
@@ -41,7 +41,7 @@ class _AcaraPerusahaanState extends State<AcaraPerusahaan> {
       return;
     }
     String urlSearch =
-        "http://10.0.3.2/kepegawaian_dzaky/search_acara_perusahaan.php?search=$search";
+        "http://10.0.2.2/kepegawaian_dzaky/search_acara_perusahaan.php?search=$search";
     try {
       var responseSeacrh = await http.get(Uri.parse(urlSearch));
       final List listSearch = jsonDecode(responseSeacrh.body);

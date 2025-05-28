@@ -1,6 +1,5 @@
 # Sistem Kepegawaian
 
-![Banner](https://via.placeholder.com/800x200.png?text=Sistem+Kepegawaian)  
 *Sistem Kepegawaian - Aplikasi manajemen administrasi pegawai berbasis Flutter dan PHP.*
 
 **Sistem Kepegawaian** adalah aplikasi mobile yang dikembangkan menggunakan **Flutter** untuk antarmuka pengguna (frontend) dan **PHP** untuk logika server (backend), dengan basis data **MySQL**. Aplikasi ini dirancang untuk mempermudah pengelolaan administrasi pegawai dengan fitur-fitur seperti absensi, laporan harian, pengelolaan ide kreatif, dan berita internal.
